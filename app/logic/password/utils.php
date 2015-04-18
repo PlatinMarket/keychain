@@ -1,4 +1,8 @@
 <?php
+session_start();
+$_SESSION["last_exception"] = null;
+
+require "ldap.php";
 
 define('FILE', "password_file.dat");
 
@@ -31,6 +35,15 @@ function deletePassword($slug){
   unset($passwords[$slug]);
   if (commitChanges($passwords)) { return true; }
   return false;
+}
+
+function throwError($err){
+  if (!isset($_SESSION["last_exception"])) $_SESSION["last_exception"] = array();
+  $_SESSION["last_exception"][] = $err;
+}
+
+function readError(){
+  return $_SESSION["last_exception"];
 }
 
 function commitChanges($passwords){

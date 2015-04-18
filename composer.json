@@ -1,0 +1,9 @@
+{
+  "name": "platin-server-center-api",
+  "require": {
+    "tiesa/ldap": "1.0.*@dev"
+  },
+  "config": {
+    "vendor-dir": "app/logic/vendor/"
+  }
+}
