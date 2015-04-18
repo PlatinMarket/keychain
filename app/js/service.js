@@ -2,7 +2,12 @@
 
 /* Services */
 
-var KeyChainService = angular.module('KeyChainService', ['ngResource']);
+var KeyChainService = angular.module('KeyChainService', ['ngResource']).config(function ($httpProvider) {
+    $httpProvider.defaults.transformRequest = function(data)
+    {
+        
+    };
+});;
 
 KeyChainService.factory('KeyChainService', ['$resource',
   function($resource){
