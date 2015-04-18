@@ -4,6 +4,14 @@
   -o-transition: all .15s ease-in-out;
   transition: all .15s ease-in-out;
 }
+.btn.active.focus, 
+.btn.active:focus, 
+.btn.focus, 
+.btn:active.focus, 
+.btn:active:focus, 
+.btn:focus {
+  outline: none;
+}
 .fa{
   -webkit-user-select: none;
   -moz-user-select: none; 
