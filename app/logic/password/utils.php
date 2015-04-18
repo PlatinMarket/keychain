@@ -2,7 +2,7 @@
 session_start();
 $_SESSION["last_exception"] = null;
 
-require "ldap.php";
+require "ldap_utils.php";
 
 define('FILE', "password_file.dat");
 

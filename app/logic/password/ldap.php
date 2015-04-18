@@ -1,72 +1,99 @@
 <?php
-//require_once "../vendor/autoload.php";
 
-use Toyota\Component\Ldap\Core\Manager;
-use Toyota\Component\Ldap\Platform\Native\Driver;
+namespace ldap;
 
-function checkConfig($file = "config.php"){
-  if (!file_exists($file)) {return false;}
-  if (defined("LDAP_URILDAP_URI")) {return true;}
-  require $file;
-  if (defined("LDAP_URILDAP_URI")) {return true;}
-  return $false;
+abstract class AuthStatus
+{
+    const FAIL = "Authentication failed";
+    const OK = "Authentication OK";
+    const SERVER_FAIL = "Unable to connect to LDAP server";
+    const ANONYMOUS = "Anonymous log on";
 }
 
-function connect() {
-  if (!checkConfig()) {
-    throwError(new Exception("Config file missing!"));
-    return false;
-  }
-  try {
-    $params = array(
-      'hostname' => LDAP_URILDAP_URI,
-      'base_dn' => LDAP_BASE_DN
-    );
-    return new Manager($params, new Driver());
-  } catch (Exception $err) {
-    throwError($err);
-    return false;
-  }
-}
+// The LDAP server
+class LDAP
+{
+    private $server = "127.0.0.1";
+    private $domain = "localhost";
+    private $admin = "admin";
+    private $password = "";
+    private $baseDn = "";
+    private $attributes = array("cn", "memberof", "samaccountname");
+    private $baseDomain = "";
 
-function loginUser($username, $password) {
-  if ($manager = connect()) {
-    try {
-      $manager->connect();
-      $manager->bind($username, $password);
-
-      //$users = $manager->getNode(LDAP_SEARCH_DN);
-
-      //$members = $users->get("member");
-      //print_r(get_class_methods($members));
-      //print_r($members->getValues());
-
-      $results = $manager->search(0, LDAP_SEARCH_DN, "(cn=*)");
-      print_r($results);
-      print_r(get_class_methods($results));
-      foreach ($results as $node) {
-          echo $node->getDn();
-          foreach ($node->getAttributes() as $attribute) {
-              echo sprintf('%s => %s', $attribute->getName(), implode(',', $attribute->getValues()));
-          }
-      }
-
-      return true;
-    } catch (Exception $e) {
-      throwError($e);
-      return false;
+    public function __construct($server, $domain, $baseDn, $baseDomain)
+    {
+        $this->server = $server;
+        $this->domain = $domain;
+        $this->baseDn = $baseDn;
+        $this->baseDomain = $baseDomain;
     }
-  }
-  return false;
+
+    // Authenticate the against server the domain\username and password combination.
+    public function authenticate($username, $password) {
+        $this->admin = $username;
+        $this->password = $password;
+
+        if (empty($password)) return false;
+        $ldap = ldap_connect($this->server);
+        if (!$ldap) return false;
+        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $ldapbind = @ldap_bind($ldap, $this->baseDomain . "\\" . $this->admin, $this->password);
+
+        if($ldapbind) return true;
+
+        ldap_close($ldap);
+        return false;
+    }
+
+    // Get an array of users or return false on error
+    public function get_users() {       
+        if(!($ldap = ldap_connect($this->server))) return false;
+
+        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+        ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+        $ldapbind = ldap_bind($ldap, $this->baseDomain . "\\" . $this->admin, $this->password);
+
+        $base_dn = $this->baseDn;
+        $sr=ldap_search($ldap, $this->domain, "(&(memberof=" . $base_dn . "))", $this->attributes);
+        $info = ldap_get_entries($ldap, $sr);
+       
+        $users = array();
+        for($i = 0; $i < $info["count"]; $i++) {
+            $users[] = $info[$i]["samaccountname"][0];
+        }
+        return $users;
+    }
 }
 
-function checkSession(){
-  return isset($_SESSION["user_name"]) && !is_null($_SESSION["user_name"]);
-}
+class User
+{
+    var $auth_status = AuthStatus::FAIL;
+    var $username = "Anonymous";
+    var $password = "";
 
-function createSession($user_name, $name, $group) {
-  $_SESSION["user_name"] = $user_name;
-  $_SESSION["name"] = $name;
-  $_SESSION["group"] = $group;
-  return true;
-}
+    var $groups = Array();
+    var $dn = "";
+    var $name = "";
+    var $mail = "";
+    var $telephone = "";
+    var $other_telephone = Array();
+    var $mobile = "";
+    var $skype = "";
+    var $department = "";
+    var $title = "";
+
+    public function __construct($username, $password)
+    {       
+        $this->auth_status = AuthStatus::FAIL;
+        $this->username = $username;
+        $this->password = $password;
+    }
+
+    public function get_auth_status()
+    {
+        return $this->auth_status;
+    }
+ }
+?>

@@ -8,3 +8,4 @@ tmp
 .DS_Store
 password_file.dat
 components/
+config.php
