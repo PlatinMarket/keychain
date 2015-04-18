@@ -2,7 +2,7 @@
 
 /* Applications Controller */
 
-KeyChain.controller('KeyChainController', function ($scope, $sce, KeyChainService) {
+KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyChainService) {
 
   $scope.passwords = KeyChainService.passwords();
   $scope.name = "";
@@ -61,6 +61,11 @@ KeyChain.controller('KeyChainController', function ($scope, $sce, KeyChainServic
     });
   };
 
+  $scope.copied = function(password){
+    password.copied = true;
+    $timeout(function(){ password.copied = false; }, 1000);   
+  }
+
   $scope.highlight = function(text, search) {
     if (!search) {
         return $sce.trustAsHtml(text);
@@ -74,3 +79,4 @@ KeyChain.controller('KeyChainController', function ($scope, $sce, KeyChainServic
   }
 
 });
+
