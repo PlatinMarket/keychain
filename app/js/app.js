@@ -12,3 +12,8 @@ KeyChain.config(['ngClipProvider', function(ngClipProvider) {
 }]);
 
 moment.locale('tr');
+
+swal.setDefaults({
+  confirmButtonText: 'Tamam',
+  cancelButtonText: 'İptal'
+});

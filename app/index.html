@@ -41,7 +41,7 @@
         <div class="col col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h3 class="panel-title">KeyChain <span class="badge">v0.3b</span></h3>
+              <h3 class="panel-title">KeyChain <span class="badge">v0.5b</span><a class="pull-right btn btn-danger btn-xs" href ng-click="logout()">Çıkış</a></h3>
             </div>
             <div class="panel-body">
                 <input type="search" class="form-control" ng-model="search" placeholder="Ara..." />
@@ -58,12 +58,13 @@
                   <div class="form-group col-lg-8 col-md-8 col-sm-8">
                     <h4 class="list-group-item-heading"><span ng-bind-html="highlight(password.name, search)">{{password.name}}</span></h4>
                     <p class="list-group-item-text text-muted">
-                      <span ng-bind-html="highlight(password.value, search)">{{password.value}}</span>
-                      <a href class="btn btn-xs btn-default copy-to-clipboard" title="Panoya kopyala" clip-copy="password.value" clip-click="copied(password)"><i ng-hide="password.copied" class="fa fa-clipboard"></i><i ng-show="password.copied" class="fa fa-check"></i></a>
+                      {{password.value}}
+                      <a href class="btn btn-xs btn-default copy-to-clipboard" title="Panoya kopyala" clip-copy="password.value" clip-click="copied(password)">
+                        <i ng-hide="password.copied" class="fa fa-clipboard"></i>
+                        <i ng-show="password.copied" class="fa fa-check"></i>
+                      </a>
                     </p>
                     <span>
-
-                    
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-3 list-key-functions">
                     <div class="btn-group btn-group-justified">

@@ -1,4 +1,6 @@
 <?php
+set_exception_handler('exception_handler');
+
 session_start();
 $_SESSION["last_exception"] = null;
 
@@ -56,6 +58,35 @@ function commitChanges($passwords){
   }
 }
 
+function isAjax(){
+  return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function exception_handler($exception) {
+  $code = 500;
+  $header = "Fatal Error";
+
+  if (get_class($exception) == "HttpException") {
+    $code = $exception->getCode();
+    $header = get_class($exception);
+  }
+
+  http_response_code($code);
+
+  if (isAjax()){
+    header('Content-Type: application/json');
+    echo json_encode(
+      array(
+        "code" => $exception->getCode(),
+        "message" => $exception->getMessage()
+      )
+    );
+    return;
+  }
+  header('Content-Type: text/plain');
+  echo $header . ": " . $exception->getMessage();
+}
+
 setlocale(LC_ALL, 'en_US.UTF8');
 function toAscii($str, $replace=array(), $delimiter='-') {
   if( !empty($replace) ) {
@@ -68,6 +99,21 @@ function toAscii($str, $replace=array(), $delimiter='-') {
   $clean = preg_replace("/[\/_|+ -]+/", $delimiter, $clean);
 
   return $clean;
+}
+
+class HttpException extends Exception {
+  
+  public function __construct($message, $code = 0, Exception $previous = null) {
+    // some code
+
+    // make sure everything is assigned properly
+    parent::__construct($message, $code, $previous);
+  }
+
+  public function __toString() {
+    return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+  }
+
 }
 
 ?>

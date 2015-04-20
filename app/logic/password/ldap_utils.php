@@ -1,6 +1,15 @@
 <?php
 require "ldap.php";
 
+$command = basename($_SERVER["SCRIPT_FILENAME"], '.php');
+$publicCommands = array('login', 'logout');
+
+if (!checkSession() && !in_array($command, $publicCommands)) {
+  throw new HttpException("Not Authorized", 401);
+} else {
+  $_SESSION["time"] = time();
+}
+
 function checkConfig($file = "config.php"){
   if (!file_exists($file)) {return false;}
   if (defined("LDAP_URILDAP_URI")) {return true;}
@@ -26,15 +35,9 @@ function connect() {
 function loginUser($username, $password) {
   if ($ldap = connect()) {
     try {
-      
       if (!$ldap->authenticate($username, $password)) return false;
       $users = $ldap->get_users();
-      
       return in_array($username, $users);
-      
-
-
-      return false;
     } catch (Exception $e) {
       throwError($e);
       return false;
@@ -47,9 +50,8 @@ function checkSession(){
   return isset($_SESSION["user_name"]) && !is_null($_SESSION["user_name"]);
 }
 
-function createSession($user_name, $name, $group) {
+function createSession($user_name) {
   $_SESSION["user_name"] = $user_name;
-  $_SESSION["name"] = $name;
-  $_SESSION["group"] = $group;
+  $_SESSION["time"] = time();
   return true;
 }

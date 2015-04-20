@@ -67,10 +67,14 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
   }
 
   $scope.highlight = function(text, search) {
-    if (!search) {
-        return $sce.trustAsHtml(text);
-    }
+    if (!search) return $sce.trustAsHtml(text);
     return $sce.trustAsHtml(text.replace(new RegExp(search, 'gi'), '<span class="highlighted">$&</span>'));
+  };
+
+  $scope.logout = function(){
+    KeyChainService.logout(function(data){
+      if (data.result === true) { window.location = "login.html"; }
+    });
   };
 
   function ValidatePassword(password, newFlag){

@@ -15,8 +15,9 @@ if (empty($data) || !is_array($data) || !isset($data['username']) || !isset($dat
 $result = false;
 $message = "Yanlış kullanıcı adı ve(ya) şifre";
 if (loginUser($data["username"], $data["password"])) {
+  createSession($data["username"]);
   $result = true;
-  $message = "";
+  $message = "Giriş başarılı";
 }
 
 echo json_encode(array('result' => $result, 'message' => $message), JSON_FORCE_OBJECT);

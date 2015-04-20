@@ -66,34 +66,4 @@ class LDAP
         return $users;
     }
 }
-
-class User
-{
-    var $auth_status = AuthStatus::FAIL;
-    var $username = "Anonymous";
-    var $password = "";
-
-    var $groups = Array();
-    var $dn = "";
-    var $name = "";
-    var $mail = "";
-    var $telephone = "";
-    var $other_telephone = Array();
-    var $mobile = "";
-    var $skype = "";
-    var $department = "";
-    var $title = "";
-
-    public function __construct($username, $password)
-    {       
-        $this->auth_status = AuthStatus::FAIL;
-        $this->username = $username;
-        $this->password = $password;
-    }
-
-    public function get_auth_status()
-    {
-        return $this->auth_status;
-    }
- }
 ?>
