@@ -16,4 +16,6 @@ define("LDAP_BASE_DN", "");
   */
 define("LDAP_SEARCH_DN", "");
 
+
+define('FILE', "");
 ?>

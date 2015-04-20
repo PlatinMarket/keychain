@@ -6,7 +6,7 @@ $_SESSION["last_exception"] = null;
 
 require "ldap_utils.php";
 
-define('FILE', "password_file.dat");
+if (!defined('FILE')) define('FILE', "password_file.dat");
 
 if (!file_exists(FILE)) { file_put_contents(FILE, serialize(array())); }
 

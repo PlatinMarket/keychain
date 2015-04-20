@@ -1,6 +1,8 @@
 <?php
 require "ldap.php";
 
+checkConfig();
+
 $command = basename($_SERVER["SCRIPT_FILENAME"], '.php');
 $publicCommands = array('login', 'logout');
 
