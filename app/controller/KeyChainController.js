@@ -77,6 +77,35 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
     });
   };
 
+  $scope.generatePassword = function($event){
+    var symbols = false;
+    if ($event.altKey) symbols = true;
+    $scope.value = generatePassword(20, symbols);
+
+  };
+
+  function generatePassword(length, symbols) {
+    var length = (length ? length : 8),
+        symbols = symbols ? symbols : false,
+        charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "",
+        symbolStr = "@!_";
+
+    if (symbols == true) charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" + symbolStr
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    if (symbols == true) {
+      var tobeAdd = symbolStr.charAt(Math.floor(Math.random() * (symbolStr.length - 1)));
+      console.log("eklenecek " + tobeAdd);
+      retVal = retVal.split('');
+      var targetIndex = Math.floor(Math.random() * retVal.length) % (retVal.length - 1)
+      retVal[targetIndex] = tobeAdd;
+      retVal = retVal.join('');
+    }
+    return retVal;
+  }
+
   function ValidatePassword(password, newFlag){
     if (!newFlag) newFlag = false;
     return password.name.trim() != "" && password.value.trim() != "" && (newFlag == false || _.pluck($scope.passwords, "name").indexOf(password.name) == -1)
