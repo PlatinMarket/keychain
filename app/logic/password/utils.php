@@ -1,5 +1,6 @@
 <?php
 set_exception_handler('exception_handler');
+require 'config.php';
 
 require '../vendor/autoload.php';
 PlatinBox\OpenId::SetOpenId("https://openid.platinbox.org");
