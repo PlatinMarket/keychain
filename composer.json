@@ -1,9 +1,31 @@
 {
   "name": "platin-server-center-api",
+  "repositories": [
+    {
+      "type":"package",
+      "package": {
+        "name": "PlatinMarket/platinbox-openid",
+        "version":"0.6",
+        "source": {
+            "url": "https://github.com/PlatinMarket/platinbox-openid.git",
+            "type": "git",
+            "reference":"master"
+          }
+      },
+      "autoload": {
+        "classmap": ["src/"]
+      }
+    }
+  ],
   "require": {
-    "tiesa/ldap": "1.0.*@dev"
+    "PlatinMarket/platinbox-openid": "0.6"
   },
   "config": {
-    "vendor-dir": "app/logic/vendor/"
+    "vendor-dir": "app/logic/vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "PlatinBox\\": "app/logic/vendor/PlatinMarket/platinbox-openid/src"
+    }
   }
 }

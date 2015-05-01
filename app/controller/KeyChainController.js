@@ -4,9 +4,10 @@
 
 KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyChainService) {
 
-  $scope.passwords = KeyChainService.passwords();
+  $scope.passwords = KeyChainService.passwords(function(){$scope.loginState = true;});
   $scope.name = "";
   $scope.value = "";
+  $scope.loginState = loginState;
 
   $scope.current_password = null;
   $scope.edit = function(password){
@@ -18,6 +19,7 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
     password.updating = true;
     if (!ValidatePassword(password, false)) return swal("Hata", "Geçersiz Şifre Kaydı");
     KeyChainService.update_password(password, function(data){
+      $scope.loginState = true;
       password.updating = false;
       if (data.result == false) { return swal("Hata", "Hata Kaydedilemedi!");  }
       password.isEditing = false;
@@ -33,6 +35,7 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
     if (!ValidatePassword(password, true)) return swal("Hata", "Geçersiz Şifre Kaydı");
     $scope.search = "";
     KeyChainService.add_password(password, function(data){
+      $scope.loginState = true;
       $scope.updating = false;
       if (data.result == false) { return swal("Hata", "Kaydedilemedi!");  }
       $scope.passwords.push(data);
@@ -56,6 +59,7 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
     password.updating = true;
     var index = $scope.passwords.indexOf(password);
     KeyChainService.delete_password(password, function(data){
+      $scope.loginState = true;
       if (data.result == true) { $scope.passwords.splice(index, 1); }
       password.updating = false;
     });
@@ -72,9 +76,11 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
   };
 
   $scope.logout = function(){
-    KeyChainService.logout(function(data){
-      if (data.result === true) { window.location = "login.html"; }
-    });
+    window.location = "logout.php";
+  };
+
+  $scope.login = function(){
+    window.location = "login.php";
   };
 
   $scope.generatePassword = function($event){

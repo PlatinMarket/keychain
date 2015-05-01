@@ -1,10 +1,18 @@
 <?php
 set_exception_handler('exception_handler');
 
-session_start();
-$_SESSION["last_exception"] = null;
+require '../vendor/autoload.php';
+PlatinBox\OpenId::SetOpenId("https://openid.platinbox.org");
 
-require "ldap_utils.php";
+$command = basename($_SERVER["SCRIPT_FILENAME"], '.php');
+$publicCommands = array('login', 'logout');
+
+if (!PlatinBox\OpenId::logged() && !in_array($command, $publicCommands)) {
+  throw new HttpException("Not Authorized", 401);
+}
+
+@session_start();
+$_SESSION["last_exception"] = null;
 
 if (!defined('FILE')) define('FILE', "password_file.dat");
 
