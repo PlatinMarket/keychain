@@ -27,23 +27,22 @@
     <script src="components/ng-clip/src/ngClip.js?v0.6"></script>
 
     <!--App Logic-->
-    <script src="js/app.js?v0.6"></script>
-    <script src="js/service.js?v0.6"></script>
+    <script src="js/app.js?v0.7"></script>
+    <script src="js/service.js?v0.7"></script>
 
     <!--Controllers-->
-    <script src="controller/KeyChainController.js?v0.6"></script>
+    <script src="controller/KeyChainController.js?v0.7"></script>
 
   </head>
 
   <body>
-    <div class="container" ng-controller="KeyChainController">
+    <div class="container" ng-controller="KeyChainController" ng-show="loginState">
       <div class="row">
         <div class="col col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h3 class="panel-title">KeyChain <span class="badge">v0.5b</span>
-                <a ng-show="loginState" class="pull-right btn btn-danger btn-xs" href ng-click="logout()">Çıkış</a>
-                <a ng-hide="loginState" class="pull-right btn btn-danger btn-xs" href ng-click="login()">Giriş</a>
+                <a class="pull-right btn btn-danger btn-xs" href ng-click="logout()">Çıkış</a>
               </h3>
             </div>
             <div class="panel-body">

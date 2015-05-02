@@ -1,8 +1,6 @@
 'use strict';
 
 /* App Module */
-var loginState = false;
-
 var KeyChain = angular.module('KeyChain', [
   'KeyChainService',
   'ngClipboard'

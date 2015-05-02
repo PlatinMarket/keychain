@@ -7,7 +7,7 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
   $scope.passwords = KeyChainService.passwords(function(){$scope.loginState = true;});
   $scope.name = "";
   $scope.value = "";
-  $scope.loginState = loginState;
+  $scope.loginState = false;
 
   $scope.current_password = null;
   $scope.edit = function(password){
@@ -77,10 +77,6 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
 
   $scope.logout = function(){
     window.location = "logout.php";
-  };
-
-  $scope.login = function(){
-    window.location = "login.php";
   };
 
   $scope.generatePassword = function($event){

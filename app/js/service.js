@@ -8,14 +8,13 @@ var KeyChainService = angular.module('KeyChainService', ['ngResource']).config(f
     $httpProvider.defaults.transformResponse = function(data, parser, statusCode) {
         var retVal = old_transformResponse[0].apply(this, arguments);
         if (statusCode == 401) { 
-          loginState = false;
+          swal({title: "Hoşgeldiniz", text: "Keychain Service", confirmButtonColor: "#DD6B55", confirmButtonText: "Giriş", closeOnConfirm: false}, function(){ window.location = "login.php"; });
           return undefined;
         }
         if (statusCode != 200) {
           sweetAlert(retVal.code.toString(), retVal.message, "error");
           return undefined;
         }
-        loginState = true;
         return retVal;
     };
 });
