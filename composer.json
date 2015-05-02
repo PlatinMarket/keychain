@@ -5,7 +5,7 @@
       "type":"package",
       "package": {
         "name": "PlatinMarket/platinbox-openid",
-        "version":"0.6",
+        "version":"0.7",
         "source": {
             "url": "https://github.com/PlatinMarket/platinbox-openid.git",
             "type": "git",
@@ -18,7 +18,7 @@
     }
   ],
   "require": {
-    "PlatinMarket/platinbox-openid": "0.6"
+    "PlatinMarket/platinbox-openid": "0.7"
   },
   "config": {
     "vendor-dir": "app/logic/vendor"
