@@ -99,7 +99,6 @@ KeyChain.controller('KeyChainController', function ($scope, $timeout, $sce, KeyC
     }
     if (symbols == true) {
       var tobeAdd = symbolStr.charAt(Math.floor(Math.random() * (symbolStr.length - 1)));
-      console.log("eklenecek " + tobeAdd);
       retVal = retVal.split('');
       var targetIndex = Math.floor(Math.random() * retVal.length) % (retVal.length - 1)
       retVal[targetIndex] = tobeAdd;

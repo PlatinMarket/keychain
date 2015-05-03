@@ -6,7 +6,7 @@ require '../vendor/autoload.php';
 PlatinBox\OpenId::SetOpenId("https://openid.platinbox.org");
 
 $command = basename($_SERVER["SCRIPT_FILENAME"], '.php');
-$publicCommands = array('login', 'logout');
+$publicCommands = array('login', 'logout', 'api');
 
 if (!PlatinBox\OpenId::logged() && !in_array($command, $publicCommands)) {
   throw new HttpException("Not Authorized", 401);

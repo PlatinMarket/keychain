@@ -4,11 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "41859f7f0f02b1266c182a4fa636ad44",
+    "hash": "76a17461565c24493e2d3c1c7eff5ea5",
     "packages": [
         {
             "name": "PlatinMarket/platinbox-openid",
-            "version": "0.6",
+            "version": "0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PlatinMarket/platinbox-openid.git",
