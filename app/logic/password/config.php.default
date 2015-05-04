@@ -1,7 +1,8 @@
 <?php
 
-define('FILE', '');
+define('FILE', "");
 
 define('OPENID_SERVER', '');
+define('OPENID_MEMBER_OF', '');
 
 define('ALLOW_SUBNET', '192.168');
