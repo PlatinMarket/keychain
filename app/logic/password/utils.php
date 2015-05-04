@@ -1,19 +1,18 @@
 <?php
 set_exception_handler('exception_handler');
 require 'config.php';
+if (!defined('OPENID_SERVER')) throw new HttpException("OPENID_SERVER not defined", 500);
 
 require '../vendor/autoload.php';
-PlatinBox\OpenId::SetOpenId("https://openid.platinbox.org");
+PlatinBox\OpenId::SetOpenId(OPENID_SERVER);
 
 $command = basename($_SERVER["SCRIPT_FILENAME"], '.php');
 $publicCommands = array('login', 'logout', 'api');
 
-if (!PlatinBox\OpenId::logged() && !in_array($command, $publicCommands)) {
+if (!defined('ALLOW_SUBNET')) define('ALLOW_SUBNET', "@@@");
+if (!PlatinBox\OpenId::logged() && !in_array($command, $publicCommands) && strpos(clientIp(), ALLOW_SUBNET) === false) {
   throw new HttpException("Not Authorized", 401);
 }
-
-@session_start();
-$_SESSION["last_exception"] = null;
 
 if (!defined('FILE')) define('FILE', "password_file.dat");
 
@@ -48,15 +47,6 @@ function deletePassword($slug){
   return false;
 }
 
-function throwError($err){
-  if (!isset($_SESSION["last_exception"])) $_SESSION["last_exception"] = array();
-  $_SESSION["last_exception"][] = $err;
-}
-
-function readError(){
-  return $_SESSION["last_exception"];
-}
-
 function commitChanges($passwords){
   if (!file_exists(FILE)) { file_put_contents(FILE, serialize(array())); }
   try {
@@ -69,6 +59,10 @@ function commitChanges($passwords){
 
 function isAjax(){
   return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function clientIp(){
+  return isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
 }
 
 function exception_handler($exception) {
@@ -96,7 +90,7 @@ function exception_handler($exception) {
   echo $header . ": " . $exception->getMessage();
 }
 
-setlocale(LC_ALL, 'en_US.UTF8');
+setlocale(LC_ALL, 'tr_TR.utf8');
 function toAscii($str, $replace=array(), $delimiter='-') {
   if( !empty($replace) ) {
     $str = str_replace((array)$replace, ' ', $str);
@@ -113,9 +107,6 @@ function toAscii($str, $replace=array(), $delimiter='-') {
 class HttpException extends Exception {
   
   public function __construct($message, $code = 0, Exception $previous = null) {
-    // some code
-
-    // make sure everything is assigned properly
     parent::__construct($message, $code, $previous);
   }
 
